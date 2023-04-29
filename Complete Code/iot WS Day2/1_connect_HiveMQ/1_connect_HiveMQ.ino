@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "YourNetworkSSID";
-const char* password = "YourNetworkPassword";
+const char* ssid = "Test";
+const char* password = "Test1234";
 
 const char* mqtt_server = "broker.hivemq.com";
 const int mqtt_port = 1883;
@@ -39,6 +39,6 @@ void loop() {
     }
   }
   client.loop();
-  client.publish("iot_workshop/bncoe/group/1", "Hello from ESP32")
+  client.publish("iot_workshop/bncoe/group/1", "Hello from ESP32");
   delay(100);
 }

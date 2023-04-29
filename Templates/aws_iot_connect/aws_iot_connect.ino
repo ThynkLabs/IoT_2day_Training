@@ -21,8 +21,8 @@
 #include "WiFi.h"
 
 // The MQTT topics that this device should publish/subscribe
-#define AWS_IOT_PUBLISH_TOPIC "esp32/pub"
-#define AWS_IOT_SUBSCRIBE_TOPIC "esp32/sub"
+#define AWS_IOT_PUBLISH_TOPIC "thynklabs/temperature/group/1"
+#define AWS_IOT_SUBSCRIBE_TOPIC "thynklabs/relay/group/1"
 
 WiFiClientSecure net = WiFiClientSecure();
 MQTTClient client = MQTTClient(256);
@@ -77,7 +77,7 @@ void messageHandler(String &topic, String &payload) {
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   connectAWS();
 }
 

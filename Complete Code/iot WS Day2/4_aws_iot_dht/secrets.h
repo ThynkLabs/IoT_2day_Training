@@ -17,8 +17,8 @@
 
 #define THINGNAME "group_1"
 
-const char WIFI_SSID[] = "JAYSH";
-const char WIFI_PASSWORD[] = "1111111111";
+const char WIFI_SSID[] = "Test";
+const char WIFI_PASSWORD[] = "Test1234";
 const char AWS_IOT_ENDPOINT[]= "aynomhw2tgffs-ats.iot.ap-south-1.amazonaws.com";
 
 // Amazon Root CA 1

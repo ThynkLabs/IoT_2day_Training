@@ -14,7 +14,7 @@
 */
 
 
-
+#include <DHT.h>
 #include <WiFiClientSecure.h>
 #include <MQTTClient.h>
 #include <ArduinoJson.h>
@@ -24,6 +24,11 @@
 // The MQTT topics that this device should publish/subscribe
 #define AWS_IOT_PUBLISH_TOPIC "thynklabs/temperature/group/1"
 #define AWS_IOT_SUBSCRIBE_TOPIC "thynklabs/relay/group/1"
+#define DHTPIN 27     // GPIO pin connected to DHT11 data pin
+#define DHTTYPE DHT11 
+DHT dht(DHTPIN, DHTTYPE);
+
+#define RELAY 4
 
 WiFiClientSecure net = WiFiClientSecure();
 MQTTClient client = MQTTClient(256);
@@ -31,6 +36,7 @@ MQTTClient client = MQTTClient(256);
 void connectAWS() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  pinMode(RELAY,OUTPUT);
 
   Serial.println("Connecting to Wi-Fi");
 
@@ -74,8 +80,8 @@ net.setPrivateKey(AWS_CERT_PRIVATE);
 void publishMessage()
 {
   StaticJsonDocument<200> doc;
-  doc["time"] = millis();
-  doc["group"] = String("group_1"); //Replace this with group num.
+  doc["temperature"] = String(dht.readTemperature());
+  doc["humidity"] =String(dht.readHumidity());
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer); // print to client
 
@@ -83,10 +89,15 @@ void publishMessage()
 }
 
 
-
 void messageHandler(String &topic, String &payload) {
   Serial.println("incoming: " + topic + " - " + payload);
-
+  if(payload=="0"){
+    digitalWrite(RELAY,HIGH);
+  }
+  else if(payload=="1")
+  {
+    digitalWrite(RELAY,LOW);
+  }
   //  StaticJsonDocument<200> doc;
   //  deserializeJson(doc, payload);
   //  const char* message = doc["message"];
@@ -95,6 +106,7 @@ void messageHandler(String &topic, String &payload) {
 void setup() {
   Serial.begin(115200);
   connectAWS();
+  dht.begin();
 }
 
 void loop() {

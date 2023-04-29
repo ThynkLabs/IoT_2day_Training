@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "YourNetworkSSID";
-const char* password = "YourNetworkPassword";
+const char* ssid = "Test";
+const char* password = "Test1234";
 
 const char* mqtt_server = "broker.hivemq.com";
 const int mqtt_port = 1883;
@@ -22,18 +22,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   // Check if the message is 1
   if((char)payload[0] == '1'){
-  // Set Esp32 pin 4 HIGH
-    digitalWrite(Relay, HIGH);
-  }
-  else if((char)payload[0] == '0'){
   // Set Esp32 pin 4 LOW
     digitalWrite(Relay, LOW);
+  }
+  else if((char)payload[0] == '0'){
+  // Set Esp32 pin 4 HIGH
+    digitalWrite(Relay, HIGH);
   }
 }
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   WiFi.begin(ssid, password);
   pinMode(Relay,OUTPUT);
   while (WiFi.status() != WL_CONNECTED) {
@@ -52,7 +52,7 @@ void loop() {
     if (client.connect("esp_thynk")) {
       Serial.println("Connected to MQTT broker"); 
       //Subscribe Code Here
-      client.subscribe(“iot_workshop/bncoe/group/1/relay”); 
+      client.subscribe("iot_workshop/bncoe/group/1/relay");
     } else {
       Serial.print("Failed to connect to MQTT broker, rc=");
       Serial.print(client.state());
